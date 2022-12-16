@@ -15,7 +15,7 @@ func main() {
 	// Create a Unix domain socket and listen for incoming connections.
 	socket, err := net.Listen("unix", socketPath)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	// Cleanup the sockfile.
@@ -29,13 +29,10 @@ func main() {
 
 	m := http.NewServeMux()
 	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello kung fu developer! "))
+		w.Write([]byte("Hi kung fu developer from a server running on UDS! \n"))
 	})
 
-	server := http.Server{
-		Handler: m,
-	}
-
+	server := http.Server{Handler: m}
 	if err := server.Serve(socket); err != nil {
 		log.Fatal(err)
 	}

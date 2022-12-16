@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kungfudev-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: nethttp
+        image: douglasmakey/simple-http:latest
+        volumeMounts:
+        - mountPath: /tmp/
+          name: socket-volume
+      - name: unixhttp
+        image: douglasmakey/simple-http-uds:latest
+        volumeMounts:
+        - mountPath: /tmp/
+          name: socket-volume
+      volumes:
+      - name: socket-volume
+        emptyDir: {}
